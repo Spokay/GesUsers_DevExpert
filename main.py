@@ -1,11 +1,24 @@
+from Controllers import UserController as Ctrls
 from Controllers import Controller
-from Models.UserDAO import *
 
 
-def run():
+def main():
+
+    # first of all launch authentification
+    while True:
+        res = Controller.launchAuth()
+        if res is False:
+            Controller.launchAuth()
+        else:
+            break
+
+    # then start the loop with the right user
+
+    # TODO: specify the type of Controller according to the user status
     while True:
         val = input()
-        Controller().displayMessage(val)
+        Ctrls.UserController().displayMessage(val)
 
 
-run()
+if __name__ == "__main__":
+    main()
