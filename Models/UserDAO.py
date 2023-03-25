@@ -8,8 +8,10 @@ class UserDAO:
         self.dbConn = Database().getDbConn()
 
     def findUserByLogin(self, login):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "SELECT * FROM Users WHERE login = %s"
-        res = self.dbConn.execute(query, login)
+        stmt = cursor.execute(query, [login])
+        res = cursor.fetchone()
         if res != 1:
             return User(res['user_id'], res['login'])
         else:

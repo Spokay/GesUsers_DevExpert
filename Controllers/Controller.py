@@ -3,10 +3,15 @@ from Models.UserDAO import UserDAO
 
 def launchAuth():
     authsuccess = False
-    loginVal = input("Entre ton login")
+    loginVal = input("Enter login")
     user = UserDAO().findUserByLogin(loginVal)
+    if user is not False:
+        authsuccess = True
+        print(user.getLogin())
+        passwordVal = input("Enter password")
 
-    passwordVal = input("Entre mot de passe")
+    else:
+        print("Login doesn't exist")
 
     return authsuccess
 
