@@ -1,9 +1,7 @@
 class User:
     def __init__(self, content_id, text):
-        self.__content_id = None
-        self.__text = None
-        self.setId(content_id)
-        self.setText(text)
+        self.__content_id = content_id
+        self.__text = text
 
     def setId(self, content_id):
         self.__content_id = content_id

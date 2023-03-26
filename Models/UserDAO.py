@@ -1,5 +1,6 @@
 from Models.Database import *
 from Models.User import User
+from Models.Role import Role
 
 
 class UserDAO:
@@ -9,13 +10,12 @@ class UserDAO:
 
     def findUserByLogin(self, login):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
-        query = "SELECT * FROM Users WHERE login = %s"
+        query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id WHERE login = %s"
         stmt = cursor.execute(query, [login])
         res = cursor.fetchone()
-        if res != 1:
-            return User(res['user_id'], res['login'])
+        if res is not None:
+            return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'], Role(res['role_id'], res['rolename']))
         else:
-            print("query failed")
             return False
 
     def findUserById(self):
@@ -33,8 +33,10 @@ class UserDAO:
     def findContentByKeywords(self, keyword):
         return
 
-    def create(self, Content):
-        return
+    def create(self, user):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = f"INSERT INTO Users (user_id, login, pwd, nom, prenom, role_id) VALUES (%s, %s, %s, %s, %s, %s)"
+        stmt = cursor.execute(query, [user.getId(), user.getLogin(), user.getPwd(), user.getName(), user.getFirstName(), user.getRole().getId()])
 
     def delete(self, user_id):
         return

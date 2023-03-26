@@ -1,11 +1,11 @@
 class User:
-    def __init__(self, user_id, login, psw=None):
-        self.__psw = None
-        self.__login = None
-        self.__user_id = None
-        self.setId(user_id)
-        self.setLogin(login)
-        self.setPsw(psw)
+    def __init__(self, user_id, login, pwd, name, firstname, role):
+        self.__role = role
+        self.__firstname = firstname
+        self.__name = name
+        self.__pwd = pwd
+        self.__login = login
+        self.__user_id = user_id
 
     def setId(self, user_id):
         self.__user_id = user_id
@@ -13,8 +13,17 @@ class User:
     def setLogin(self, login):
         self.__login = login
 
-    def setPsw(self, psw):
-        self.__psw = psw
+    def setPwd(self, pwd):
+        self.__pwd = pwd
+
+    def setName(self, name):
+        self.__name = name
+
+    def setFirstName(self, firstname):
+        self.__firstname = firstname
+
+    def setRole(self, role):
+        self.__role = role
 
     def getId(self):
         return self.__user_id
@@ -22,5 +31,14 @@ class User:
     def getLogin(self):
         return self.__login
 
-    def getPsw(self):
-        return self.__psw
+    def getPwd(self):
+        return self.__pwd
+
+    def getName(self):
+        return self.__name
+
+    def getFirstName(self):
+        return self.__firstname
+
+    def getRole(self):
+        return self.__role
