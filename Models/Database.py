@@ -8,13 +8,17 @@ class Database:
         self.setDbConn()
 
     def setDbConn(self):
-        self.__dbConn = mysql.connector.connect(
+        conn = mysql.connector.connect(
             user='root',
             password='',
             host='127.0.0.1',
             port='3306',
             database='gesusers'
-        ).cursor()
+        )
+        self.__dbConn = conn
 
     def getDbConn(self):
         return self.__dbConn
+
+    def disconnect_database(self):
+        self.__dbConn.close()

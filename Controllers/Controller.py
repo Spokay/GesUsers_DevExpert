@@ -1,28 +1,41 @@
 from Models.UserDAO import UserDAO
+from hashlib import md5
 
 
 def launchAuth():
-    authsuccess = False
-    loginVal = input("Entre ton login")
+    loginVal = input("Enter login :\n")
     user = UserDAO().findUserByLogin(loginVal)
-
-    passwordVal = input("Entre mot de passe")
-
-    return authsuccess
+    if user is not False:
+        encodedpasswordVal = md5(input("Enter password :\n").encode()).hexdigest()
+        if encodedpasswordVal == user.getPwd():
+            print(f"Welcome {user.getFirstName()} {user.getName()}")
+            return user
+        else:
+            print("password doesn't match the login")
+            return False
+    else:
+        print("Login doesn't exist")
+        return False
 
 
 class Controller:
-    def __init__(self):
-        pass
+    def __init__(self, user):
+        self.menus = {}
+        currentUser = user
 
-    currentUser = None
+    # Choose an option from the menus
+    def chooseMenuOption(self, inputValue):
+        self.menus[int(inputValue)]['method']()
 
-    def getMenu(self, inputValue):
-        pass
+    # show the menus and ask for the choice of the user
+    def displayMessage(self):
+        for option in self.menus:
+            print(f"{option}. {self.menus[option].get('option-name')}")
 
-    def displayMessage(self, inputValue):
-        self.getMenu(inputValue)
+        inputValue = input("Choose option :\n")
+        self.chooseMenuOption(inputValue)
 
+    # Check if a user is logged
     def isLogged(self):
         return True if self.currentUser is not None else False
 
