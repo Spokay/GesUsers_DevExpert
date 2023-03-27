@@ -1,5 +1,5 @@
 from Controllers.Controller import Controller
-
+from Models.UserDAO import UserDAO
 
 class AdminController(Controller):
 
@@ -26,10 +26,19 @@ class AdminController(Controller):
         print("delete user option")
 
     def showUser(self):
-        print("show user option")
+        nomVal = input("Enter un Nom :\n")
+        user = UserDAO().findUserByNom(nomVal)
+        if user is not False:
+            print(f"Id: {user.getId()} \n Login: {user.getLogin()} \n Nom: {user.getName()} \n Prenom: {user.getFirstName()} \n Role: {user.getRole().getName()}")
+        else:
+            print("Name doesn't exist")
+
+        keepGoing = input("Do you want to find another user : yes or no")
+        if keepGoing == "yes" or keepGoing == "YES" or keepGoing == "y":
+            self.showUser()
 
     def showAll(self):
-        print("show all users option")
+        print("show all user")
 
     def exitCode(self):
         exit("I will exit")

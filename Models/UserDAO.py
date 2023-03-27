@@ -18,6 +18,16 @@ class UserDAO:
         else:
             return False
 
+    def findUserByNom(self, nom):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id WHERE Users.nom = %s"
+        stmt = cursor.execute(query, [nom])
+        res = cursor.fetchone()
+        if res is not None:
+            return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'], Role(res['role_id'], res['rolename']))
+        else:
+            return False
+
     def findUserById(self):
         pass
 
