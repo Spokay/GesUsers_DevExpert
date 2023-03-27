@@ -38,5 +38,14 @@ class UserDAO:
         query = f"INSERT INTO Users (user_id, login, pwd, nom, prenom, role_id) VALUES (%s, %s, %s, %s, %s, %s)"
         stmt = cursor.execute(query, [user.getId(), user.getLogin(), user.getPwd(), user.getName(), user.getFirstName(), user.getRole().getId()])
 
-    def delete(self, user_id):
+    def delete(self, login):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "DELETE FROM Users WHERE login = %s;"
+        stmt = cursor.execute(query, [login])
+        self.dbConn.commit()
+        if cursor.rowcount == 1:
+            print("The user was deleted.")
+        else:
+            print("The user was not found.")
+        
         return

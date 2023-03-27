@@ -1,5 +1,5 @@
 from Controllers.Controller import Controller
-
+from Models.UserDAO import UserDAO
 
 class AdminController(Controller):
 
@@ -23,7 +23,8 @@ class AdminController(Controller):
         print("edit user option")
 
     def deleteUser(self):
-        print("delete user option")
+        login = input("Quel user voulez-vous supprimer ?")
+        UserDAO().delete(login)
 
     def showUser(self):
         print("show user option")
