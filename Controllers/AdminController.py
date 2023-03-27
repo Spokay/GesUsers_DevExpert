@@ -1,3 +1,4 @@
+from hashlib import md5
 from Controllers.Controller import Controller
 from Models.UserDAO import UserDAO
 
@@ -17,14 +18,23 @@ class AdminController(Controller):
         }
 
     def createUser(self):
-        print("create user option")
+        firstname = input("User firstname : \n")
+        name = input("User name : \n")
+        login = f"{firstname[0]}{name}"
+        # encrypt password
+        password = md5(input("User password :\n").encode()).hexdigest()
+        UserDAO().create([login, password, name, firstname])
 
+    # Edit a user's information
     def editUser(self):
         print("edit user option")
 
+    # Delete a user
     def deleteUser(self):
-        print("delete user option")
+        login = input("Which user's do you want to delete (login): \n")
+        UserDAO().delete(login)
 
+    # Show user's information
     def showUser(self):
         nomVal = input("Enter un Nom :\n")
         user = UserDAO().findUserByNom(nomVal)
@@ -37,8 +47,10 @@ class AdminController(Controller):
         if keepGoing == "yes" or keepGoing == "YES" or keepGoing == "y":
             self.showUser()
 
+    # Show all users
     def showAll(self):
         print("show all user")
 
+    # Exit program
     def exitCode(self):
         exit("I will exit")
