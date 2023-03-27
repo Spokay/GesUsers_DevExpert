@@ -1,4 +1,7 @@
 from Controllers.Controller import Controller
+from Models.UserDAO import UserDAO
+from Models.User import User
+from hashlib import md5
 
 
 class AdminController(Controller):
@@ -17,7 +20,11 @@ class AdminController(Controller):
         }
 
     def createUser(self):
-        print("create user option")
+        firstname = input("User firstname : \n")
+        name = input("User name : \n")
+        login = f"{firstname[0]}{name}"
+        password = md5(input("User password :\n").encode()).hexdigest()
+        UserDAO().create([login, password, name, firstname])
 
     def editUser(self):
         print("edit user option")
