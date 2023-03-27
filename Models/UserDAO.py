@@ -6,12 +6,14 @@ from Models.Role import Role
 class UserDAO:
 
     def __init__(self):
+        # initialize a db connexion as an attribute in UserDAO
         self.dbConn = Database().getDbConn()
 
     def findUserByLogin(self, login):
+        # get the right cursor
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id WHERE login = %s"
-        stmt = cursor.execute(query, [login])
+        cursor.execute(query, [login])
         res = cursor.fetchone()
         if res is not None:
             return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'],
@@ -47,11 +49,9 @@ class UserDAO:
     def delete(self, login):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "DELETE FROM Users WHERE login = %s;"
-        stmt = cursor.execute(query, [login])
+        cursor.execute(query, [login])
         self.dbConn.commit()
         if cursor.rowcount == 1:
             print("The user was deleted.")
         else:
             print("The user was not found.")
-        
-        return

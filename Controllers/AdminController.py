@@ -1,7 +1,7 @@
+from hashlib import md5
 from Controllers.Controller import Controller
 from Models.UserDAO import UserDAO
-from Models.User import User
-from hashlib import md5
+
 
 class AdminController(Controller):
 
@@ -22,21 +22,27 @@ class AdminController(Controller):
         firstname = input("User firstname : \n")
         name = input("User name : \n")
         login = f"{firstname[0]}{name}"
+        # encrypt password
         password = md5(input("User password :\n").encode()).hexdigest()
         UserDAO().create([login, password, name, firstname])
 
+    # Edit a user's information
     def editUser(self):
         print("edit user option")
 
+    # Delete a user
     def deleteUser(self):
-        login = input("Quel user voulez-vous supprimer ?")
+        login = input("Which user's do you want to delete (login): \n")
         UserDAO().delete(login)
 
+    # Show user's information
     def showUser(self):
         print("show user option")
 
+    # Show all users
     def showAll(self):
         print("show all users option")
 
+    # Exit program
     def exitCode(self):
         exit("I will exit")
