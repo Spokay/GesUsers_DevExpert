@@ -44,5 +44,14 @@ class UserDAO:
         else:
             print("Cannot create user")
 
-    def delete(self, user_id):
+    def delete(self, login):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "DELETE FROM Users WHERE login = %s;"
+        stmt = cursor.execute(query, [login])
+        self.dbConn.commit()
+        if cursor.rowcount == 1:
+            print("The user was deleted.")
+        else:
+            print("The user was not found.")
+        
         return

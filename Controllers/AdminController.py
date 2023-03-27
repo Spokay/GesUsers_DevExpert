@@ -3,7 +3,6 @@ from Models.UserDAO import UserDAO
 from Models.User import User
 from hashlib import md5
 
-
 class AdminController(Controller):
 
     def __init__(self, user):
@@ -30,7 +29,8 @@ class AdminController(Controller):
         print("edit user option")
 
     def deleteUser(self):
-        print("delete user option")
+        login = input("Quel user voulez-vous supprimer ?")
+        UserDAO().delete(login)
 
     def showUser(self):
         print("show user option")
