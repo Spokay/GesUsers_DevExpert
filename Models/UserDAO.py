@@ -14,7 +14,8 @@ class UserDAO:
         stmt = cursor.execute(query, [login])
         res = cursor.fetchone()
         if res is not None:
-            return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'], Role(res['role_id'], res['rolename']))
+            return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'],
+                        Role(res['role_id'], res['rolename']))
         else:
             return False
 
@@ -33,10 +34,15 @@ class UserDAO:
     def findContentByKeywords(self, keyword):
         return
 
-    def create(self, user):
+    def create(self, userinfo):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
-        query = f"INSERT INTO Users (user_id, login, pwd, nom, prenom, role_id) VALUES (%s, %s, %s, %s, %s, %s)"
-        stmt = cursor.execute(query, [user.getId(), user.getLogin(), user.getPwd(), user.getName(), user.getFirstName(), user.getRole().getId()])
+        query = "INSERT INTO Users (login, pwd, nom, prenom, role_id) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(query, [userinfo[0], userinfo[1], userinfo[2], userinfo[3], 1])
+        self.dbConn.commit()
+        if cursor.rowcount == 1:
+            print("User created")
+        else:
+            print("Cannot create user")
 
     def delete(self, login):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)

@@ -8,6 +8,7 @@ class Database:
         self.setDbConn()
 
     def setDbConn(self):
+
         conn = mysql.connector.connect(
             user='root',
             password='',
