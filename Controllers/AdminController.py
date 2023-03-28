@@ -18,6 +18,7 @@ class AdminController(Controller):
             6: {"method": self.exitCode, "option-name": "Exit"}
         }
 
+    # Create a user
     def createUser(self):
         firstname = input("User firstname : \n")
         name = input("User name : \n")
@@ -28,35 +29,61 @@ class AdminController(Controller):
 
     # Edit a user's information
     def editUser(self):
-        print("edit user option")
+        # ask for the user to edit
+        login = input("Which user's do you want to edit ? (login): \n")
+        user = UserDAO().findUserByLogin(login)
+        if user is not False:
+            # if user exists then print his info and ask which column to edit as long as you want to keep going
+            self.printUserInfo(user)
+            keepGoing = True
+            while keepGoing is True:
+                column = input("Which column do you want to edit ? \n")
+                if column.capitalize() != "Id" and column.capitalize() != "Role" and column.capitalize() != "Pwd":
+                    method = getattr(user, "set" + column.capitalize())
+                    newVal = input("Choose a new value : \n")
+                    method(newVal)
+                else:
+                    print("You can't edit this column \n")
+
+                keepGoing = self.keepGoingOrNot(input("Do you want to keep editing ? (yes/YES/y) or not ? (anything "
+                                                      "else) \n"))
+
+            UserDAO().update(user)
+
+
+        else:
+            print("This user doesn't exist")
+            keepGoing = input("Do you want to search for another user ? (yes/YES/y) or not ? (anything else) \n")
+            if self.keepGoingOrNot(keepGoing):
+                self.editUser()
 
     # Delete a user
     def deleteUser(self):
         login = input("Which user's do you want to delete (login): \n")
-        UserDAO().delete(login)
+        confirm = input("Are you sure you want to delete this user ? (yes/YES/y) or not ? (anything else)")
+        if self.keepGoingOrNot(confirm):
+            UserDAO().delete(login)
 
     # Show user's information
     def showUser(self):
         nomVal = input("Enter un Nom :\n")
         user = UserDAO().findUserByNom(nomVal)
         if user is not False:
-            print(
-                f"Id: {user.getId()} \n Login: {user.getLogin()} \n Nom: {user.getName()} \n Prenom: {user.getFirstName()} \n Role: {user.getRole().getName()}")
+            self.printUserInfo(user)
         else:
             print("Name doesn't exist")
 
-        keepGoing = input("Do you want to find another user : yes or no \n")
-        if keepGoing == "yes" or keepGoing == "YES" or keepGoing == "y":
+        keepGoing = input("Do you want to find another user ? (yes/YES/y) or not ? (anything else) \n")
+        if self.keepGoingOrNot(keepGoing):
             self.showUser()
 
     # Show all users
     def showAll(self):
         users = UserDAO().findAll()
         for user in users:
-            print(
-                f"Id: {user.getId()} \n Login: {user.getLogin()} \n Nom: {user.getName()} \n Prenom: {user.getFirstName()} \n Role: {user.getRole().getName()}")
+            self.printUserInfo(user)
 
-        input("Type anything to exit the view mode")
+        input("Type anything to exit the view mode \n")
 
     # Exit program
     def exitCode(self):
