@@ -9,8 +9,8 @@ class UserDAO:
         # initialize a db connexion as an attribute in UserDAO
         self.dbConn = Database().getDbConn()
 
+    # methods used to query the database
     def findUserByLogin(self, login):
-        # get the right cursor
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id WHERE login = %s"
         cursor.execute(query, [login])
@@ -35,7 +35,17 @@ class UserDAO:
         pass
 
     def findAll(self):
-        return
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id"
+        cursor.execute(query)
+        res = cursor.fetchall()
+        users = []
+        for user in res:
+            users.append(User(user['user_id'], user['login'], user['pwd'], user['nom'], user['prenom'], Role(user['role_id'], user['rolename'])))
+        if len(users) < 1:
+            print("No users found")
+        else:
+            return users
 
     def findContentById(self, user_id):
         return

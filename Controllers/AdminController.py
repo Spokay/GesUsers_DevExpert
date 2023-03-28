@@ -2,6 +2,7 @@ from hashlib import md5
 from Controllers.Controller import Controller
 from Models.UserDAO import UserDAO
 
+
 class AdminController(Controller):
 
     def __init__(self, user):
@@ -39,17 +40,23 @@ class AdminController(Controller):
         nomVal = input("Enter un Nom :\n")
         user = UserDAO().findUserByNom(nomVal)
         if user is not False:
-            print(f"Id: {user.getId()} \n Login: {user.getLogin()} \n Nom: {user.getName()} \n Prenom: {user.getFirstName()} \n Role: {user.getRole().getName()}")
+            print(
+                f"Id: {user.getId()} \n Login: {user.getLogin()} \n Nom: {user.getName()} \n Prenom: {user.getFirstName()} \n Role: {user.getRole().getName()}")
         else:
             print("Name doesn't exist")
 
-        keepGoing = input("Do you want to find another user : yes or no")
+        keepGoing = input("Do you want to find another user : yes or no \n")
         if keepGoing == "yes" or keepGoing == "YES" or keepGoing == "y":
             self.showUser()
 
     # Show all users
     def showAll(self):
-        print("show all user")
+        users = UserDAO().findAll()
+        for user in users:
+            print(
+                f"Id: {user.getId()} \n Login: {user.getLogin()} \n Nom: {user.getName()} \n Prenom: {user.getFirstName()} \n Role: {user.getRole().getName()}")
+
+        input("Type anything to exit the view mode")
 
     # Exit program
     def exitCode(self):
