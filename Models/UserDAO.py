@@ -31,9 +31,6 @@ class UserDAO:
         else:
             return False
 
-    def findUserById(self):
-        pass
-
     def findAll(self):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id"
@@ -46,15 +43,6 @@ class UserDAO:
             print("No users found")
         else:
             return users
-
-    def findContentById(self, user_id):
-        return
-
-    def findContentByDate(self, date):
-        return
-
-    def findContentByKeywords(self, keyword):
-        return
 
     def create(self, userinfo):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
@@ -75,3 +63,13 @@ class UserDAO:
             print("The user was deleted.")
         else:
             print("The user was not found.")
+
+    def update(self, user):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "UPDATE users SET login = %s, nom = %s, prenom = %s WHERE user_id = %s"
+        cursor.execute(query, [user.getLogin(), user.getName(), user.getFirstName(), user.getId()])
+        self.dbConn.commit()
+        if cursor.rowcount == 1:
+            print("The user was updated. \n")
+        else:
+            print("The user was not found. \n")
