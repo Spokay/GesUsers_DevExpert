@@ -52,3 +52,6 @@ class Controller:
     # check a boolean for a confirmation
     def keepGoingOrNot(self, inputVal):
         return True if inputVal == "yes" or inputVal == "YES" or inputVal == "y" else False
+
+    def generatePassword(self):
+        pass

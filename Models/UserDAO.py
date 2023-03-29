@@ -73,3 +73,13 @@ class UserDAO:
             print("The user was updated. \n")
         else:
             print("The user was not found. \n")
+
+    def changePassword(self, newPassword, currentUser):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "UPDATE users SET pwd = %s WHERE user_id = %s"
+        cursor.execute(query, [newPassword, currentUser.getId()])
+        self.dbConn.commit()
+        if cursor.rowcount == 1:
+            print("The password was successfully updated. \n")
+        else:
+            print("The user was not found. \n")
