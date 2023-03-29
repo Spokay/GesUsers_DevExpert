@@ -31,6 +31,3 @@ class UserController(Controller):
         if self.keepGoingOrNot(keepGoing):
             newPassword = self.generatePassword()
             UserDAO().changePassword(newPassword, self.currentUser)
-
-    def exitCode(self):
-        exit("I will exit")
