@@ -23,6 +23,10 @@ class Controller:
         self.menus = {}
         self.currentUser = user
 
+    def run(self):
+        while True:
+            self.displayMessage()
+
     # Choose an option from the menus
     def chooseMenuOption(self, inputValue):
         self.menus[int(inputValue)]['method']()

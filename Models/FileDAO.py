@@ -4,19 +4,19 @@ from Models.Role import Role
 from Models.File import File
 
 
-class UserDAO:
+class FileDAO:
 
     def __init__(self):
         # initialize a db connexion as an attribute in UserDAO
         self.dbConn = Database().getDbConn()
 
     # methods used to query the database
-    def findFilesForUserId(self, login):
+    def findFilesForUserId(self, user_id):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "SELECT f.*, u.* FROM file f JOIN access a JOIN users u ON f.file_id = a.file_id AND a.user_id = u.user_id WHERE a.user_id = %s"
-        cursor.execute(query, [login])
+        cursor.execute(query, [user_id])
         res = cursor.fetchall()
-        if cursor.rowcount > 1:
+        if cursor.rowcount >= 1:
             files = []
             for file in res:
                 usersAllowed = self.findUserAllowedForFileId(file['file_id'])

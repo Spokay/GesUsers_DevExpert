@@ -1,8 +1,6 @@
-import getpass
-from hashlib import md5
 from Controllers.Controller import Controller
-from Controllers.FileController import FileController
 from Models.UserDAO import UserDAO
+from Controllers.FileController import FileController
 
 
 class AdminController(Controller):
@@ -53,7 +51,6 @@ class AdminController(Controller):
 
             UserDAO().update(user)
 
-
         else:
             print("This user doesn't exist")
             keepGoing = input("Do you want to search for another user ? (yes/YES/y) or not ? (anything else) \n")
@@ -89,6 +86,4 @@ class AdminController(Controller):
         input("Type anything to exit the view mode \n")
 
     def openFileExplorer(self):
-        FileController(self.currentUser)
-
-    # Exit program
+        FileController(self.currentUser, self).run()
