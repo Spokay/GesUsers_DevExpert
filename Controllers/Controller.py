@@ -55,3 +55,6 @@ class Controller:
 
     def generatePassword(self):
         pass
+
+    def exitCode(self):
+        exit("I will exit")

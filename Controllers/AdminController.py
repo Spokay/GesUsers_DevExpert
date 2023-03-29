@@ -1,6 +1,7 @@
 import getpass
 from hashlib import md5
 from Controllers.Controller import Controller
+from Controllers.FileController import FileController
 from Models.UserDAO import UserDAO
 
 
@@ -88,8 +89,6 @@ class AdminController(Controller):
         input("Type anything to exit the view mode \n")
 
     def openFileExplorer(self):
-        pass
+        FileController(self.currentUser)
 
     # Exit program
-    def exitCode(self):
-        exit("I will exit")
