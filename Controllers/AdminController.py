@@ -1,3 +1,4 @@
+import getpass
 from hashlib import md5
 from Controllers.Controller import Controller
 from Models.UserDAO import UserDAO
@@ -13,9 +14,10 @@ class AdminController(Controller):
             1: {"method": self.createUser, "option-name": "Create user"},
             2: {"method": self.editUser, "option-name": "Edit user"},
             3: {"method": self.deleteUser, "option-name": "Delete user"},
-            4: {"method": self.showUser, "option-name": "Show user by login or id"},
+            4: {"method": self.showUser, "option-name": "Show user by name"},
             5: {"method": self.showAll, "option-name": "Show all users"},
-            6: {"method": self.exitCode, "option-name": "Exit"}
+            6: {"method": self.openFileExplorer, "option-name": "File explorer"},
+            7: {"method": self.exitCode, "option-name": "Exit"}
         }
 
     # Create a user
@@ -23,9 +25,9 @@ class AdminController(Controller):
         firstname = input("User firstname : \n")
         name = input("User name : \n")
         login = f"{firstname[0]}{name}"
-        # encrypt password
-        password = md5(input("User password :\n").encode()).hexdigest()
-        UserDAO().create([login, password, name, firstname])
+        # generate crypted password
+        # password = self.generatePassword()
+        # UserDAO().create([login, password, name, firstname])
 
     # Edit a user's information
     def editUser(self):
@@ -84,6 +86,9 @@ class AdminController(Controller):
             self.printUserInfo(user)
 
         input("Type anything to exit the view mode \n")
+
+    def openFileExplorer(self):
+        pass
 
     # Exit program
     def exitCode(self):
