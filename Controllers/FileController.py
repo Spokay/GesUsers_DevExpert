@@ -8,18 +8,28 @@ class FileController(Controller):
         super().__init__(user)
         self.loggedUserController = loggedUserController
         self.menus = {
-            1: {"method": self.viewFiles, "option-name": "View File"},
-            2: {"method": self.exitCode, "option-name": "Exit"}
+            1: {"method": self.createFile, "option-name": "Create file"},
+            2: {"method": self.viewFiles, "option-name": "View files"},
+            3: {"method": self.exitCode, "option-name": "Exit"}
         }
+        self.fileDirectory = "/ressources/"
+
+    def createFile(self):
+        filename = input("Choose a file name : \n")
+        fileCreated = open(self.fileDirectory + filename, "x")
+        fileCreated.write("ouai")
+        fileCreated.close()
+        print(fileCreated)
 
     def viewFiles(self):
-        filesAllowed = FileDAO().findFilesForUserId(self.currentUser.getId())
+        filesAllowed = FileDAO().findFilesForUserId(self.currentUser.getId(), self.isAdmin())
         if filesAllowed is not None:
+            print(f"ID | Filename | Users allowed | Created At | Updated At")
             for file in filesAllowed:
-                allowedUsers = ' '.join(e.getLogin() for e in file.getAllowedUsers())
-                print(f"ID | Filename | Users allowed | Created At | Updated At")
+                if file.getAllowedUsers() is not None:
+                    allowedUsers = ' '.join(e.getLogin() for e in file.getAllowedUsers())
                 print(
-                    f"{file.getId()} | {file.getFileName()} | {allowedUsers} | {file.getCreatedAt()} | {file.getUpdatedAt()}")
+                    f"{file.getId()} | {file.getFileName()} | {allowedUsers or ''} | {file.getCreatedAt()} | {file.getUpdatedAt()}")
 
             input("ok")
         else:

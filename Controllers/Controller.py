@@ -1,5 +1,23 @@
 from Models.UserDAO import UserDAO
 from hashlib import md5
+import msvcrt
+
+
+def secret_input(msg=""):
+    print(msg, end="", flush=True)  # affiche le message sans saut de ligne
+    hidden_input = ""
+    while True:
+        key = msvcrt.getch()  # lit un caractère à partir du clavier
+        if key == b'\r':  # si on appuie sur "Entrée"
+            print()  # affiche un saut de ligne
+            return hidden_input
+        elif key == b'\x08':  # si on appuie sur "Retour arrière"
+            if hidden_input:
+                hidden_input = hidden_input[:-1]
+                print('\b \b', end='', flush=True)  # efface le caractère précédent
+        else:
+            hidden_input += key.decode()  # ajoute le caractère saisi au mot de passe
+            print('*', end='', flush=True)  # affiche un astérisque
 
 
 def launchAuth():
@@ -46,7 +64,7 @@ class Controller:
     # Check if the current user is an admin
 
     def isAdmin(self):
-        return True if self.currentUser.role.name == "Admin" else False
+        return True if self.currentUser.getRole().getName() == "Admin" else False
 
     # print a user's information
     def printUserInfo(self, user):

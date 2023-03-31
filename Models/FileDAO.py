@@ -11,16 +11,19 @@ class FileDAO:
         self.dbConn = Database().getDbConn()
 
     # methods used to query the database
-    def findFilesForUserId(self, user_id):
+    def findFilesForUserId(self, user_id, isAdmin):
+        print(isAdmin)
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
-        query = "SELECT f.*, u.* FROM file f JOIN access a JOIN users u ON f.file_id = a.file_id AND a.user_id = u.user_id WHERE a.user_id = %s"
-        cursor.execute(query, [user_id])
+        query = "SELECT * FROM file" if isAdmin else "SELECT f.*, u.* FROM file f JOIN access a JOIN users u ON f.file_id = a.file_id AND a.user_id = u.user_id WHERE a.user_id = " + user_id
+        print(query)
+        cursor.execute(query)
         res = cursor.fetchall()
         if cursor.rowcount >= 1:
             files = []
             for file in res:
                 usersAllowed = self.findUserAllowedForFileId(file['file_id'])
-                files.append(File(file['file_id'], file['filename'], usersAllowed, file['created_at'], file['updated_at']))
+                files.append(
+                    File(file['file_id'], file['filename'], usersAllowed, file['created_at'], file['updated_at']))
 
             return files
         else:
@@ -41,3 +44,14 @@ class FileDAO:
             return users
         else:
             print("No user found")
+
+    def create(self, filename):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "INSERT INTO file (filename, created_at, updated_at) VALUES (%s, NOW(), NOW())"
+        cursor.execute(query, [filename])
+        self.dbConn.commit()
+
+        if cursor.rowcount == 1:
+            print("File created")
+        else:
+            print("Cannot create file")
