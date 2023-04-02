@@ -1,7 +1,6 @@
 from Models.UserDAO import UserDAO
 from hashlib import md5
 import random
-import string
 
 
 def launchAuth():

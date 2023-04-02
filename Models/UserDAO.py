@@ -56,7 +56,7 @@ class UserDAO:
 
     def delete(self, login):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
-        query = "DELETE FROM Users WHERE login = %s;"
+        query = "DELETE FROM users WHERE login = %s"
         cursor.execute(query, [login])
         self.dbConn.commit()
         if cursor.rowcount == 1:

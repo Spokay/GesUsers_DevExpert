@@ -12,10 +12,8 @@ class FileDAO:
 
     # methods used to query the database
     def findFilesForUserId(self, user_id, isAdmin):
-        print(isAdmin)
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
-        query = "SELECT * FROM file" if isAdmin else "SELECT f.*, u.* FROM file f JOIN access a JOIN users u ON f.file_id = a.file_id AND a.user_id = u.user_id WHERE a.user_id = " + user_id
-        print(query)
+        query = "SELECT * FROM file" if isAdmin else "SELECT f.*, u.* FROM file f JOIN access a JOIN users u ON f.file_id = a.file_id AND a.user_id = u.user_id WHERE a.user_id = " + str(user_id)
         cursor.execute(query)
         res = cursor.fetchall()
         if cursor.rowcount >= 1:
@@ -35,17 +33,15 @@ class FileDAO:
         cursor.execute(query, [file_id])
         res = cursor.fetchall()
 
-        if cursor.rowcount > 1:
+        if cursor.rowcount >= 1:
             users = []
             for user in res:
                 users.append(User(user['user_id'], user['login'], user['pwd'], user['nom'], user['prenom'],
                                   Role(user['role_id'], user['rolename'])))
 
             return users
-        else:
-            print("No user found")
 
-    def create(self, filename):
+    def create(self, filename, creator):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
         query = "INSERT INTO file (filename, created_at, updated_at) VALUES (%s, NOW(), NOW())"
         cursor.execute(query, [filename])
@@ -53,5 +49,11 @@ class FileDAO:
 
         if cursor.rowcount == 1:
             print("File created")
+            lastid = cursor.lastrowid
+            query = "INSERT INTO access (user_id, file_id) VALUES (%s, %s)"
+            cursor.execute(query, [creator.getId(), lastid])
+            self.dbConn.commit()
         else:
             print("Cannot create file")
+
+

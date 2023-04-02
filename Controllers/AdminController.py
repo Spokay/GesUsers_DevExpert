@@ -67,7 +67,7 @@ class AdminController(Controller):
     # Delete a user
     def deleteUser(self):
         login = input("Which user's do you want to delete (login): \n")
-        confirm = input("Are you sure you want to delete this user ? (yes/YES/y) or not ? (anything else)")
+        confirm = input("Are you sure you want to delete this user ? (yes/YES/y) or not ? (anything else) \n")
         if self.keepGoingOrNot(confirm):
             UserDAO().delete(login)
 

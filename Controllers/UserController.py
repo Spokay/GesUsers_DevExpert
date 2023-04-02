@@ -1,3 +1,4 @@
+from hashlib import md5
 from Controllers.Controller import Controller
 from Models.UserDAO import UserDAO
 from Controllers.FileController import FileController
@@ -30,10 +31,11 @@ class UserController(Controller):
 
     def changePassword(self):
         keepGoing = input(
-            "Another password will be generated, are you sure you want to change password ? (yes/YES/y) or not ? (anything else) \n")
+            "Another password will be generated, are you sure you want to change password ? (yes/YES/y) or not ? ("
+            "anything else) \n")
         if self.keepGoingOrNot(keepGoing):
-            newPassword = self.generatePassword()
-            UserDAO().changePassword(newPassword, self.currentUser)
+            newPassword = self.generatePassword().encode()
+            UserDAO().changePassword(md5(newPassword).hexdigest(), self.currentUser)
             print(f"Your new password will be : {newPassword}")
 
     def openFileExplorer(self):
