@@ -49,10 +49,8 @@ class UserDAO:
         query = "INSERT INTO Users (login, pwd, nom, prenom, role_id) VALUES (%s, %s, %s, %s, %s)"
         cursor.execute(query, [userinfo[0], userinfo[1], userinfo[2], userinfo[3], 1])
         self.dbConn.commit()
-        if cursor.rowcount == 1:
-            print("User created")
-        else:
-            print("Cannot create user")
+        if cursor.rowcount != 1:
+            return False
 
     def delete(self, login):
         cursor = self.dbConn.cursor(dictionary=True, prepared=True)
