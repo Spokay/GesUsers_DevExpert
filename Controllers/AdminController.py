@@ -1,3 +1,4 @@
+from hashlib import md5
 from Controllers.Controller import Controller
 from Models.UserDAO import UserDAO
 from Controllers.FileController import FileController
@@ -23,10 +24,16 @@ class AdminController(Controller):
     def createUser(self):
         firstname = input("User firstname : \n")
         name = input("User name : \n")
-        login = f"{firstname[0]}{name}"
-        # generate crypted password
-        # password = self.generatePassword()
-        # UserDAO().create([login, password, name, firstname])
+        login = f"{firstname[0].lower()}{name.lower()}"
+
+        if UserDAO().findUserByLogin(login) is False:
+            # generate crypted password
+            passwordGenerated = self.generatePassword()
+            encodedpasswordVal = md5(passwordGenerated.encode()).hexdigest()
+
+            res = UserDAO().create([login, encodedpasswordVal, name, firstname])
+            if res is not False:
+                print(f"User created successfully with password : {passwordGenerated}")
 
     # Edit a user's information
     def editUser(self):

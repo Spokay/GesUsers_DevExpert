@@ -1,5 +1,7 @@
 from Models.UserDAO import UserDAO
 from hashlib import md5
+import random
+import string
 
 
 def launchAuth():
@@ -58,7 +60,18 @@ class Controller:
         return True if inputVal == "yes" or inputVal == "YES" or inputVal == "y" else False
 
     def generatePassword(self):
-        pass
+        char_seq = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+        length = 8
+        password = ''
+        for i in range(length):
+            random_char = random.choice(char_seq)
+            password += random_char
+
+            # print(password)
+        list_pass = list(password)
+        random.shuffle(list_pass)
+        final_password = ''.join(list_pass)
+        return final_password
 
     def exitCode(self):
         exit("I will exit")
