@@ -16,8 +16,7 @@ def main():
     elif userlogged.getRole().getName() == 'User':
         controller = UserController(userlogged)
 
-    while True:
-        controller.displayMessage()
+    controller.run()
 
 
 if __name__ == "__main__":

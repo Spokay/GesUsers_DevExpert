@@ -25,6 +25,10 @@ class Controller:
         self.menus = {}
         self.currentUser = user
 
+    def run(self):
+        while True:
+            self.displayMessage()
+
     # Choose an option from the menus
     def chooseMenuOption(self, inputValue):
         self.menus[int(inputValue)]['method']()
@@ -44,7 +48,7 @@ class Controller:
     # Check if the current user is an admin
 
     def isAdmin(self):
-        return True if self.currentUser.role.name == "Admin" else False
+        return True if self.currentUser.getRole().getName() == "Admin" else False
 
     # print a user's information
     def printUserInfo(self, user):

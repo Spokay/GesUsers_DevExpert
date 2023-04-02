@@ -36,12 +36,14 @@ class UserDAO:
         query = "SELECT Users.*, Role.nom as rolename FROM Users JOIN Role ON Users.role_id = Role.role_id"
         cursor.execute(query)
         res = cursor.fetchall()
-        users = []
-        for user in res:
-            users.append(User(user['user_id'], user['login'], user['pwd'], user['nom'], user['prenom'], Role(user['role_id'], user['rolename'])))
-        if len(users) < 1:
+
+        if cursor.rowcount < 1:
             print("No users found")
         else:
+            users = []
+            for user in res:
+                users.append(User(user['user_id'], user['login'], user['pwd'], user['nom'], user['prenom'],
+                                  Role(user['role_id'], user['rolename'])))
             return users
 
     def create(self, userinfo):
