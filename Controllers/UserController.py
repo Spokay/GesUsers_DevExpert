@@ -34,6 +34,7 @@ class UserController(Controller):
         if self.keepGoingOrNot(keepGoing):
             newPassword = self.generatePassword()
             UserDAO().changePassword(newPassword, self.currentUser)
+            print(f"Your new password will be : {newPassword}")
 
     def openFileExplorer(self):
         FileController(self.currentUser, self).run()
