@@ -34,6 +34,7 @@ class AdminController(Controller):
             res = UserDAO().create([login, encodedpasswordVal, name, firstname])
             if res is not False:
                 print(f"User created successfully with password : {passwordGenerated}")
+                input("Remember your password and type anything")
 
     # Edit a user's information
     def editUser(self):
