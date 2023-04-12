@@ -57,3 +57,15 @@ class FileDAO:
             print("Cannot create file")
 
 
+    def delete(self, file_id):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "DELETE FROM file WHERE file_id = %s"
+        cursor.execute(query, [file_id])
+        self.dbConn.commit()
+
+        if cursor.rowcount == 1:
+            print("File deleted")
+        else:
+            print("Cannot delete file")
+
+
