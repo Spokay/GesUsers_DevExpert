@@ -90,6 +90,7 @@ class AdminController(Controller):
         users = UserDAO().findAll()
         for user in users:
             self.printUserInfo(user)
+            print("\n")
 
         input("Type anything to exit the view mode \n")
 
