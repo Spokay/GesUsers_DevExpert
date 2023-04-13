@@ -27,7 +27,7 @@ class FileController(Controller):
         parentDir = dirname(dirname(abspath(__file__)))
         if filename.find('.') == -1:
             filename = ''.join([filename, '.txt'])
-        fileCreated = open(parentDir + "\\"+self.fileDirectory+"\\" + filename, "x")
+        fileCreated = open(parentDir + "\\" + self.fileDirectory + "\\" + filename, "x")
         keepGoing = input("Do you want fill the file content now ? (yes/YES/y) or not ? (anything else) \n")
         if self.keepGoingOrNot(keepGoing):
             self.writeInFile(fileCreated)
@@ -38,12 +38,15 @@ class FileController(Controller):
     def readFiles(self):
         filesAllowed = FileDAO().findFilesForUserId(self.currentUser.getId(), self.isAdmin())
         if filesAllowed is not None:
-            print(f"N° | Filename | Users allowed | Created At | Updated At")
-            for file in filesAllowed:
-                if file.getAllowedUsers() is not None:
-                    allowedUsers = ' '.join(e.getLogin() for e in file.getAllowedUsers())
-                    print(
-                        f"{file.getId()} | {file.getFileName()} | {allowedUsers or ''} | {file.getCreatedAt()} | {file.getUpdatedAt()}")
+            filesDict = self.printFiles(filesAllowed)
+            fileToRead = filesDict.get(int(input("Choose a file to read : \n")))
+            parentDir = dirname(dirname(abspath(__file__)))
+            lines = open(parentDir + "\\" + self.fileDirectory + "\\" + fileToRead.getFileName(), "r")
+            fileStr = ""
+            for line in lines.readlines():
+                fileStr += line
+
+            print("File content : \n", fileStr)
             input("Type anything to quit view mode")
         else:
             print("You have no files")
@@ -54,14 +57,14 @@ class FileController(Controller):
             filesDict = self.printFiles(filesAllowed)
             fileToEdit = filesDict.get(int(input("Choose a file to edit : \n")))
             parentDir = dirname(dirname(abspath(__file__)))
-            lines = open(parentDir + "\\"+self.fileDirectory+"\\" + fileToEdit.getFileName(), "r")
+            lines = open(parentDir + "\\" + self.fileDirectory + "\\" + fileToEdit.getFileName(), "r")
             fileStr = ""
-            for l in lines.readlines():
-                fileStr += l
+            for line in lines.readlines():
+                fileStr += line
 
             lines.close()
             res = prompt("Edit this file : \n", default=fileStr)
-            fileEdited = open(parentDir + "\\"+self.fileDirectory+"\\" + fileToEdit.getFileName(), "r+")
+            fileEdited = open(parentDir + "\\" + self.fileDirectory + "\\" + fileToEdit.getFileName(), "r+")
             fileEdited.seek(0)
             fileEdited.write(res)
             fileEdited.truncate()
@@ -75,7 +78,7 @@ class FileController(Controller):
             filesDict = self.printFiles(filesAllowed)
             fileToDelete = filesDict.get(int(input("Choose a file to delete : \n")))
             parentDir = dirname(dirname(abspath(__file__)))
-            os.remove(parentDir + "\\"+self.fileDirectory+"\\" + fileToDelete.getFileName())
+            os.remove(parentDir + "\\" + self.fileDirectory + "\\" + fileToDelete.getFileName())
             FileDAO().delete(fileToDelete.getId())
 
     def giveAccess(self):
@@ -103,10 +106,9 @@ class FileController(Controller):
         for file in filesAllowed:
             filesDict[i] = file
             if file.getAllowedUsers() is not None:
-                allowedUsers = ' '.join(e.getLogin() for e in file.getAllowedUsers())
-                print(
-                    f"{i} | {file.getFileName()} | {allowedUsers or ''} | {file.getCreatedAt()} | {file.getUpdatedAt()}")
-
+                for allowedUser in file.getAllowedUsers():
+                    print(
+                        f"{i} | {file.getFileName()} | {allowedUser.getLogin() or ''} | {file.getCreatedAt()} | {file.getUpdatedAt()}")
             i += 1
 
         return filesDict

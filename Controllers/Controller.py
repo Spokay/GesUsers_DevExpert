@@ -2,17 +2,22 @@ from Models.UserDAO import UserDAO
 from hashlib import md5
 import random
 
+failCounter = 0
+
 
 def launchAuth():
     loginVal = input("Enter login :\n")
     user = UserDAO().findUserByLogin(loginVal)
     if user is not False:
+
         encodedpasswordVal = md5(input("Enter password :\n").encode()).hexdigest()
         if encodedpasswordVal == user.getPwd():
             print(f"Welcome {user.getFirstName()} {user.getName()}")
             return user
         else:
             print("password doesn't match the login")
+            global failCounter
+            failCounter += 1
             return False
     else:
         print("Login doesn't exist")

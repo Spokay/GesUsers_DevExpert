@@ -8,6 +8,8 @@ def main():
     userlogged = False
     while userlogged is False:
         userlogged = Controller.launchAuth()
+        if Controller.failCounter > 2:
+            exit("You failed too much")
 
     # then start the loop with the right user
     controller = None
