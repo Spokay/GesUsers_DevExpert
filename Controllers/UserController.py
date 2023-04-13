@@ -11,23 +11,23 @@ class UserController(Controller):
 
         # Initializing User menus with specific methods
         self.menus = {
-            1: {"method": self.showUser, "option-name": "Show a user's information"},
-            2: {"method": self.changePassword, "option-name": "Change password"},
-            3: {"method": self.openFileExplorer, "option-name": "Open file explorer"},
-            4: {"method": self.exitCode, "option-name": "Exit"}
+            # 1: {"method": self.showUser, "option-name": "Show a user's information"},
+            1: {"method": self.changePassword, "option-name": "Change password"},
+            2: {"method": self.openFileExplorer, "option-name": "Open file explorer"},
+            3: {"method": self.exitCode, "option-name": "Exit"}
         }
 
-    def showUser(self):
-        nomVal = input("Enter un Nom :\n")
-        user = UserDAO().findUserByNom(nomVal)
-        if user is not False:
-            self.printUserInfo(user)
-        else:
-            print("Name doesn't exist")
-
-        keepGoing = input("Do you want to find another user ? (yes/YES/y) or not ? (anything else) \n")
-        if self.keepGoingOrNot(keepGoing):
-            self.showUser()
+    # def showUser(self):
+    #     nomVal = input("Enter un Nom :\n")
+    #     user = UserDAO().findUserByNom(nomVal)
+    #     if user is not False:
+    #         self.printUserInfo(user)
+    #     else:
+    #         print("Name doesn't exist")
+    #
+    #     keepGoing = input("Do you want to find another user ? (yes/YES/y) or not ? (anything else) \n")
+    #     if self.keepGoingOrNot(keepGoing):
+    #         self.showUser()
 
     def changePassword(self):
         keepGoing = input(
@@ -36,7 +36,7 @@ class UserController(Controller):
         if self.keepGoingOrNot(keepGoing):
             newPassword = self.generatePassword().encode()
             UserDAO().changePassword(md5(newPassword).hexdigest(), self.currentUser)
-            print(f"Your new password will be : {newPassword}")
+            print(f"Your new password will be : {newPassword} \n")
 
     def openFileExplorer(self):
         FileController(self.currentUser, self).run()

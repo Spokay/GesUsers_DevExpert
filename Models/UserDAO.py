@@ -80,6 +80,6 @@ class UserDAO:
         cursor.execute(query, [newPassword, currentUser.getId()])
         self.dbConn.commit()
         if cursor.rowcount == 1:
-            print("The password was successfully updated. \n")
+            print("The password was successfully updated.")
         else:
             print("The user was not found. \n")
