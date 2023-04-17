@@ -1,6 +1,10 @@
+import time
+
 from Models.Database import *
 from Models.User import User
 from Models.Role import Role
+from Models.BannedIp import BannedIp
+import datetime
 
 
 class UserDAO:
@@ -16,7 +20,8 @@ class UserDAO:
         cursor.execute(query, [login])
         res = cursor.fetchone()
         if res is not None:
-            return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'], Role(res['role_id'], res['rolename']))
+            return User(res['user_id'], res['login'], res['pwd'], res['nom'], res['prenom'],
+                        Role(res['role_id'], res['rolename']))
         else:
             return False
 
@@ -83,3 +88,27 @@ class UserDAO:
             print("The password was successfully updated.")
         else:
             print("The user was not found. \n")
+
+    def banIp(self, ip):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        current = datetime.datetime.now()
+        fiveMins = current + datetime.timedelta(seconds=500)
+        query = "INSERT INTO banned_ip (ip_address, countdown) VALUES (%s, %s)"
+        cursor.execute(query, [ip, fiveMins])
+        self.dbConn.commit()
+
+    def checkIp(self, ip):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "SELECT * FROM banned_ip WHERE ip_address = %s"
+        cursor.execute(query, [ip])
+        res = cursor.fetchone()
+        if res is not None:
+            return BannedIp(res['id_banned_ip'], res['ip_address'], res['countdown'])
+        else:
+            return False
+
+    def deleteIp(self, ip):
+        cursor = self.dbConn.cursor(dictionary=True, prepared=True)
+        query = "DELETE FROM banned_ip WHERE ip_address = %s"
+        cursor.execute(query, [ip])
+        self.dbConn.commit()
