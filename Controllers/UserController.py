@@ -16,19 +16,7 @@ class UserController(Controller):
             2: {"method": self.openFileExplorer, "option-name": "Open file explorer"},
             3: {"method": self.exitCode, "option-name": "Exit"}
         }
-
-    # def showUser(self):
-    #     nomVal = input("Enter un Nom :\n")
-    #     user = UserDAO().findUserByNom(nomVal)
-    #     if user is not False:
-    #         self.printUserInfo(user)
-    #     else:
-    #         print("Name doesn't exist")
-    #
-    #     keepGoing = input("Do you want to find another user ? (yes/YES/y) or not ? (anything else) \n")
-    #     if self.keepGoingOrNot(keepGoing):
-    #         self.showUser()
-
+    # Regenrate a new password 
     def changePassword(self):
         keepGoing = input(
             "Another password will be generated, are you sure you want to change password ? (yes/YES/y) or not ? ("
@@ -38,5 +26,6 @@ class UserController(Controller):
             UserDAO().changePassword(md5(newPassword).hexdigest(), self.currentUser)
             print(f"Your new password will be : {newPassword} \n")
 
+    # Show User menu 
     def openFileExplorer(self):
         FileController(self.currentUser, self).run()
