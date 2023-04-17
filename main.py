@@ -7,9 +7,8 @@ def main():
     # first of all launch authentification
     userlogged = False
     while userlogged is False:
+        Controller.checkBan()
         userlogged = Controller.launchAuth()
-        if Controller.failCounter > 2:
-            exit("You failed too much")
 
     # then start the loop with the right user
     controller = None

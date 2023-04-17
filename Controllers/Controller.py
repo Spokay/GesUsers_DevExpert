@@ -1,6 +1,11 @@
+import time
+
 from Models.UserDAO import UserDAO
 from hashlib import md5
 import random
+from socket import gethostname, gethostbyname
+from _datetime import datetime
+from math import ceil
 
 failCounter = 0
 
@@ -22,6 +27,22 @@ def launchAuth():
     else:
         print("Login doesn't exist")
         return False
+
+
+def checkBan():
+    if failCounter > 2:
+        banIp()
+    res = UserDAO().checkIp(gethostbyname(gethostname()))
+    if res is not False:
+        secondsLeft = ceil(datetime.timestamp(res.getCountdown()) - time.time())
+        if secondsLeft > 0:
+            exit(f"You cant access to the software for {secondsLeft} seconds")
+        else:
+            UserDAO().deleteIp(res.getIpAddress())
+
+
+def banIp():
+    UserDAO().banIp(gethostbyname(gethostname()))
 
 
 class Controller:
